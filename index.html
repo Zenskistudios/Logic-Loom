@@ -448,7 +448,43 @@
 
         .gate-tooltip th,
         .gate-tooltip td {
-            padding: 2px 4px;
+            padding: 1px 5px;
             text-align: center;
+        }
+
+        .gate-tooltip th {
+            color: var(--color-true);
+            border-bottom: 1px solid var(--bg-glass)
+        }
+
+        .gate-tooltip td.v1 {
+            color: var(--color-true)
+        }
+
+        .node-output {
+            width: 72px;
+            height: 72px;
+            background: var(--color-gate-bg);
+            border: 1.5px solid var(--color-gate-border);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            transition: border-color .3s var(--ease-expo), box-shadow .4s var(--ease-expo), background .3s var(--ease-expo)
+        }
+
+        .node-output.state-true {
+            border-color: var(--color-true);
+            background: rgba(0, 240, 255, 0.06);
+            box-shadow: var(--color-true-glow);
+            animation: led-breathe 2.2s ease-in-out infinite
+        }
+
+        @keyframes led-breathe {
+            0%,
+            100%
+            box-shadow: 0 0 20px rgba(0, 240, 35)
         }
     </style>
