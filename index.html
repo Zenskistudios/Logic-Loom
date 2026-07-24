@@ -2,174 +2,187 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logic Loom</title>
-    <link href="https://fonts.googleapis.com/css2? family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500;&display=swap" rel="stylesheet">
-    <style>
-        *,
-        *::before,
-        *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Logic-Loom</title>
+	<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+	<style>
+		*,
+		*::before,
+		*::after {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box
+		}
 
-        html,
-        body {
-            height: 100%;
-            overflow: hidden;
-        }
+		html,
+		body {
+			height: 100%;
+			overflow: hidden
+		}
 
-        :root {
-           --bg-primary: #0a0a12;
+		:root {
+			--bg-primary: #0a0a12;
 			--bg-secondary: #12121e;
 			--bg-glass: rgba(18, 18, 30, 0.75);
 			--border-glass: rgba(0, 240, 255, 0.08);
 			--color-true: #00f0ff;
 			--color-false: #1a1a2e;
-			--color-true-glow: 0 0 20px rgba(0, 240, 255, 0.4), 0 0 60px rgba(0,240,255, 0.1);
-            --color-accent: #7b61ff;
-            --color-accent-glow: 0 0 15px rgba(123,97, 255, 0.3);
-            --color-danger: #ff4466;
-            --color-danger-glow: 0 0 12px rgba(255, 68, 102, 0.3);
-            --color-text: #e0e0e8;
-            --color-text-dim: #5a5a72;
-            --color-wire-true: #00f0ff;
-            --color-wire-false: #1e1e32;
-            --color-gate-bg: #16162a;
-            --color-gate-border: #2a2a44;
-            --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', monospace;
-            --font-sans: 'Inter', 'SF Pro', system-ui, sans-serif;
-            --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
-            --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
+			--color-true-glow: 0 0 20px rgba(0, 240, 255, 0.4), 0 0 60px rgba(0, 240, 255, 0.1);
+			--color-accent: #7b61ff;
+			--color-accent-glow: 0 0 15px rgba(123, 97, 255, 0.3);
+			--color-danger: #ff4466;
+			--color-danger-glow: 0 0 12px rgba(255, 68, 102, 0.3);
+			--color-text: #e0e0e8;
+			--color-text-dim: #5a5a72;
+			--color-wire-true: #00f0ff;
+			--color-wire-false: #1e1e32;
+			--color-gate-bg: #16162a;
+			--color-gate-border: #2a2a44;
+			--font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', monospace;
+			--font-sans: 'Inter', 'SF Pro', system-ui, sans-serif;
+			--ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+			--ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+			--ease-signal: cubic-bezier(0.4, 0, 0.2, 1);
+		}
 
-        body {
-            font-family: var(--font-mono);
+		body {
+			font-family: var(--font-mono);
 			background: var(--bg-primary);
 			color: var(--color-text);
 			user-select: none
-        }
+		}
 
-        .top-bar {
-            position:fixed;
-            top:0;
-            left:0;
-            right:0;
-            height: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 1.5rem;
-            z-index: 200;
-            background: linear-gradient(100deg, var(--bg-primary) 60%, transparent);
-            pointer-events: none;
-        }
+		.top-bar {
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			height: 48px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 0 1.5rem;
+			z-index: 200;
+			background: linear-gradient(180deg, var(--bg-primary) 60%, transparent);
+			pointer-events: none
+		}
 
-        .top-bar>*{
-            pointer-events: auto;
-        }
+		.top-bar>* {
+			pointer-events: auto
+		}
 
-        .app-title {
-            font-family: var(--font-mono);
-            font-size: .7rem;
-            font-weight: 600;
-            letter-spacing: .2em;
-            text-transform: uppercase;
-            opacity: .4;
-            color: var(--color-text);
-        }
-        .top-action {
-            display: flex;
-            gap: .5rem;
-            align-items: center;
-        }
+		.app-title {
+			font-family: var(--font-mono);
+			font-size: .7rem;
+			font-weight: 600;
+			letter-spacing: .2em;
+			text-transform: uppercase;
+			opacity: .4;
+			color: var(--color-text)
+		}
 
-        .action-btn {
-            font-family: var(--font-mono);
-            font-size: .6rem;
-            font-weight: 600;
-            letter-spacing: .08em;
-            text-transform: uppercase;
-            color:var(--color-text-dim);
-            background: var(--bg-glass);
-            backdrop-filter: blur(20px) saturate(1.2);
-            border: 1px solid var(--border-glass);
-            border-radius: 8px;
-            padding: .45rem .9rem;
-            cursor: pointer;
-            transition: all .3s var(--ease-expo);
-            white-space: nowrap;
-        }
+		.top-actions {
+			display: flex;
+			gap: .5rem;
+			align-items: center
+		}
 
-        .action-btn:hover {
-            color: var(--color-true);
-            border-color: rgba(0, 240, 255, 0.2)
-            box-shadow: var(--color-true-glow)
-        }
+		.action-btn {
+			font-family: var(--font-mono);
+			font-size: .6rem;
+			font-weight: 600;
+			letter-spacing: .08em;
+			text-transform: uppercase;
+			color: var(--color-text-dim);
+			background: var(--bg-glass);
+			backdrop-filter: blur(20px) saturate(1.2);
+			border: 1px solid var(--border-glass);
+			border-radius: 8px;
+			padding: .45rem .9rem;
+			cursor: pointer;
+			transition: all .3s var(--ease-expo);
+			white-space: nowrap
+		}
 
-        .action-btn:focus-visible{
-            outline: 2px solid var(--color-accent);
-            outline-offset: 2px;
-        }
+		.action-btn:hover {
+			color: var(--color-true);
+			border-color: rgba(0, 240, 255, 0.2);
+			box-shadow: var(--color-true-glow)
+		}
 
-        .action-btn.danger:hover {
-            color: var(--color-danger);
-            border-color: rgb(255, 68, 102, 0.2);
-            box-shadow: var(--color-danger--glow);
-        }
+		.action-btn:focus-visible {
+			outline: 2px solid var(--color-accent);
+			outline-offset: 2px
+		}
 
-        .action-btn:disabled {
-            opacity: .3;
-            pointer-events: none;
-        }
+		.action-btn.danger:hover {
+			color: var(--color-danger);
+			border-color: rgba(255, 68, 102, 0.2);
+			box-shadow: var(--color-danger-glow)
+		}
 
-        .canvas-viewport {
-            width: 100%;
-            height: 100vh;
-            position: relative;
-            overflow: hidden;
-            cursor: grab;
-        }
+		.action-btn:disabled {
+			opacity: .3;
+			pointer-events: none
+		}
 
-        .canvas-viewport.panning {
-            cursor: grabbing
-        }
+		.canvas-viewport {
+			width: 100%;
+			height: 100vh;
+			position: relative;
+			overflow: hidden;
+			cursor: grab
+		}
 
-        .canvas-world::before {
-            content: '';
-            position: absolute;
-            left: -50000px;
+		.canvas-viewport.panning {
+			cursor: grabbing
+		}
+
+		.canvas-world {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			top: 0;
+			left: 0;
+			transform-origin: 0 0;
+			will-change: transform;
+			overflow: visible
+		}
+
+		.canvas-world::before {
+			content: '';
+			position: absolute;
+			left: -50000px;
 			top: -50000px;
 			width: 100000px;
 			height: 100000px;
-            background-image: radial-gradient(circle at 1px 1px, rgba(0, 240, 255, 0.025) 1px, transparent 1px);
-            background-size: 40px 40px;
-            pointer-events: none;
-        }
+			background-image: radial-gradient(circle at 1px 1px, rgba(0, 240, 255, 0.025) 1px, transparent 1px);
+			background-size: 40px 40px;
+			pointer-events: none
+		}
 
-        .wire-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            z-index: 5;
-        }
+		.wire-canvas {
+			position: absolute;
+			top: 0;
+			left: 0;
+			pointer-events: none;
+			z-index: 5
+		}
 
-        /* hit-test SVG layar for wire clicks - sits over the canvas */
+		/* hit-test SVG layer for wire clicks — sits over the canvas */
+		.wire-hit-layer {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 1px;
+			height: 1px;
+			overflow: visible;
+			pointer-events: none;
+			z-index: 6
+		}
 
-        .wire-hit-layer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 1px;
-            height: 1px;
-            overflow: visible;
-            pointer-events: none;
-            z-index: 6
-        }
-        .wire-hit {
+		.wire-hit {
 			fill: none;
 			stroke: transparent;
 			stroke-width: 16;
@@ -198,7 +211,7 @@
 			pointer-events: none
 		}
 
-        .wire-temp.wire-invalid {
+		.wire-temp.wire-invalid {
 			stroke: var(--color-danger);
 			opacity: .5
 		}
@@ -243,311 +256,320 @@
 			100% {
 				opacity: 1;
 				transform: scale(1)
-			} 
-        }
+			}
+		}
 
-        @keyframes wire-reject {
+		@keyframes wire-reject {
 
-            0%,
-            100% {
-                transform: translateX(0);
-            }
-            25%{
-                transform: translateX(-4px);
-            }
-            75%{
-                transform: translateX(4px);
-            } 
-        }
+			0%,
+			100% {
+				transform: translateX(0)
+			}
 
-        .circuit-node.wire-rejected {
-            animation: wire-reject .3s var(--ease-spring);
-        }
+			25% {
+				transform: translateX(-4px)
+			}
 
-        .node-input {
-            width:90px;
-            height: 72px;
-            background: var(--color-gate-border);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-            transition: border-color .3s var(--ease-expo), box-shadow .3s var(--ease-expo);
-        }
+			75% {
+				transform: translateX(4px)
+			}
+		}
 
-        .node-input.state-true {
-            border-color: rgba(0, 240, 255, 0.25);
-            box-shadow: inset 0 0 20px rgba(0, 240, 255, 0.06), var(--color-true-glow)
-        }
+		.circuit-node.wire-rejected {
+			animation: wire-reject .3s var(--ease-spring)
+		}
 
-        .node-input.node-label {
-            font-size: .7rem;
-            font-weight: 600;
-            color: var(--color-text-dim);
-            transition: color .3s var(--ease-expo);
-        }
+		.node-input {
+			width: 90px;
+			height: 72px;
+			background: var(--color-gate-bg);
+			border: 1.5px solid var(--color-gate-border);
+			border-radius: 12px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			gap: 4px;
+			transition: border-color .3s var(--ease-expo), box-shadow .3s var(--ease-expo)
+		}
 
-        .node-input.state-true .node-label {
-            color: var(--color-true);
-        }
+		.node-input.state-true {
+			border-color: rgba(0, 240, 255, 0.25);
+			box-shadow: inset 0 0 20px rgba(0, 240, 255, 0.06), var(--color-true-glow)
+		}
 
-        .node-toggle {
-            width: 32px;
-            height:18px;
-            background: var(--bg-secondary);
-            border: 1.5px solid var(--color-gate-border);
-            border-radius: 9px;
-            position: relative;
-            cursor: pointer;
-            transition: all .3sec var(--ease-spring)
-        }
+		.node-input .node-label {
+			font-size: .7rem;
+			font-weight: 600;
+			color: var(--color-text-dim);
+			transition: color .3s var(--ease-expo)
+		}
 
-        .node-toggle:focus-visible{
-            outline: 2px solid var(--color-accent);
-            outline-offset: 2px;
-        }
+		.node-input.state-true .node-label {
+			color: var(--color-true)
+		}
 
-        .node-toggle::after{
-            content: '';
-            position: absolute;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: var(--color-text-dim);
-            top: 1.5px;
-            left: 2px;
-            transition: all .3s var(--ease-spring)
-        }
+		.node-toggle {
+			width: 32px;
+			height: 18px;
+			background: var(--bg-secondary);
+			border: 1.5px solid var(--color-gate-border);
+			border-radius: 9px;
+			position: relative;
+			cursor: pointer;
+			transition: all .3s var(--ease-spring)
+		}
 
-        .node-input.state-true .node-toggle {
+		.node-toggle:focus-visible {
+			outline: 2px solid var(--color-accent);
+			outline-offset: 2px
+		}
+
+		.node-toggle::after {
+			content: '';
+			position: absolute;
+			width: 12px;
+			height: 12px;
+			border-radius: 50%;
+			background: var(--color-text-dim);
+			top: 1.5px;
+			left: 2px;
+			transition: all .3s var(--ease-spring)
+		}
+
+		.node-input.state-true .node-toggle {
 			background: rgba(0, 240, 255, 0.12);
 			border-color: var(--color-true)
 		}
 
-        .node-input.state-true .node-toggle::after {
-            left: 16px;
-            background: var(--color-true);
-            box-shadow: 0 0 8px rgba(0, 240, 255, 0.5)
-        }
+		.node-input.state-true .node-toggle::after {
+			left: 16px;
+			background: var(--color-true);
+			box-shadow: 0 0 8px rgba(0, 240, 255, 0.5)
+		}
 
-        .node-input .input-val-label {
-            font-size: .5rem;
-            font-weight: 600;
-            color: var(--color-text-dim);
-            transition: color .3s var(--ease-expo);
-        }
+		.node-input .input-val-label {
+			font-size: .5rem;
+			font-weight: 600;
+			color: var(--color-text-dim);
+			transition: color .3s var(--ease-expo)
+		}
 
-        .node-input.state-true .input-val-label {
-            color: var(--color-true);
-        }
+		.node-input.state-true .input-val-label {
+			color: var(--color-true)
+		}
 
-        .state-icon {
-            display: inline-block;
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: var(--color-text-dim);
-            margin-right: 2px;
-            vertical-align: middle;
-            transition: background .3s var(--ease-expo), box-shadow .3s var(--ease-expo)
-        }
+		.state-icon {
+			display: inline-block;
+			width: 6px;
+			height: 6px;
+			border-radius: 50%;
+			background: var(--color-text-dim);
+			margin-right: 2px;
+			vertical-align: middle;
+			transition: background .3s var(--ease-expo), box-shadow .3s var(--ease-expo)
+		}
 
-        .state-icon.active {
-            background: var(--color-true);
-            box-shadow: 0 0 6px rgba(0, 240, 255, 0.5)
-        }
+		.state-icon.active {
+			background: var(--color-true);
+			box-shadow: 0 0 6px rgba(0, 240, 255, 0.5)
+		}
 
-        .node-gate {
-            width: 120px;
-            height: 80px;
-            background: var(--color-gate-bg);
-            border: 1.5px solid var(--color-gate-border);
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 2px;
-            transition: border-color .3s var(--ease-expo), box-shadow .3s var(--ease-expo)
-        }
+		.node-gate {
+			width: 120px;
+			height: 80px;
+			background: var(--color-gate-bg);
+			border: 1.5px solid var(--color-gate-border);
+			border-radius: 12px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			gap: 2px;
+			transition: border-color .3s var(--ease-expo), box-shadow .3s var(--ease-expo)
+		}
 
-        .node-gate.output-true {
-            border-color: rgba(0, 240, 255, 0.2);
-            box-shadow: inset 0 0 20px rgba(0, 240, 255, 0.05), 0 0 15px rgba(0, 240, 255, 0.08)
-        }
+		.node-gate.output-true {
+			border-color: rgba(0, 240, 255, 0.2);
+			box-shadow: inset 0 0 20px rgba(0, 240, 255, 0.05), 0 0 15px rgba(0, 240, 255, 0.08)
+		}
 
-        .node-gate .gate-symbol {
-            width: 38px;
-            height: 26px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--color-text-dim);
-            transition: transform .3s var(--ease-expo), color .3s var(--ease-expo);
-        }
+		.node-gate .gate-symbol {
+			width: 38px;
+			height: 26px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			color: var(--color-text-dim);
+			transition: transform .3s var(--ease-spring), color .3s var(--ease-expo)
+		}
 
-        .node-gate.output-true .gate-symbol {
-            color: var(--color-true)
-        }
-        .node-gate .gate-symbol svg {
-            width: 100%;
-            height: 100%
-        }
+		.node-gate.output-true .gate-symbol {
+			color: var(--color-true)
+		}
 
-        .node-gate .gate-type-label {
-            font-size: .55rem;
-            font-weight: 600;
-            color: var(--color-text-dim);
-            letter-spacing: .1em;
-            transition: color .3s var(--ease-expo)
-        }
+		.node-gate .gate-symbol svg {
+			width: 100%;
+			height: 100%
+		}
 
-        .node-gate.output-true .gate-type-label {
-            color: rgba(0, 240, 255, 0.05)
-        }
+		.node-gate .gate-type-label {
+			font-size: .55rem;
+			font-weight: 600;
+			color: var(--color-text-dim);
+			letter-spacing: .1em;
+			transition: color .3s var(--ease-expo)
+		}
 
-        .gate-tooltip{
-            position: absolute;
-            bottom: calc(100% + 10px);
-            left: 50%;
-            transform: translateX(-50%) translateY(6px);
-            background: var(--bg-glass);
-            backdrop-filter: blur(20px) saturate(1.2);
-            border: 1px solid var(--border-glass);
-            border-radius: 10px;
-            padding: .5rem .7rem;
-            font-size: .5rem;
-            color: var(--color-text-dim);
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: all .25s var(--ease-expo);
-            z-index: 50
-        }
+		.node-gate.output-true .gate-type-label {
+			color: rgba(0, 240, 255, 0.5)
+		}
 
-        .gate-tooltip::after {
-            content: '';
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%)
-            border: 5px solid transparent;
+		.gate-tooltip {
+			position: absolute;
+			bottom: calc(100% + 10px);
+			left: 50%;
+			transform: translateX(-50%) translateY(6px);
+			background: var(--bg-glass);
+			backdrop-filter: blur(20px) saturate(1.2);
+			border: 1px solid var(--border-glass);
+			border-radius: 10px;
+			padding: .5rem .7rem;
+			font-size: .5rem;
+			color: var(--color-text-dim);
+			white-space: nowrap;
+			opacity: 0;
+			pointer-events: none;
+			transition: all .25s var(--ease-expo);
+			z-index: 50
+		}
+
+		.gate-tooltip::after {
+			content: '';
+			position: absolute;
+			top: 100%;
+			left: 50%;
+			transform: translateX(-50%);
+			border: 5px solid transparent;
 			border-top-color: rgba(0, 240, 255, 0.08)
-        }
+		}
 
-        .node-gate:hover .gate-tooltip,
-        .node-gate:focus-within .gate-tooltip {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
+		.node-gate:hover .gate-tooltip,
+		.node-gate:focus-within .gate-tooltip {
+			opacity: 1;
+			transform: translateX(-50%) translateY(0)
+		}
 
-        .gate-tooltip table {
-            border-collapse: collapse
-        }
+		.gate-tooltip table {
+			border-collapse: collapse
+		}
 
-        .gate-tooltip th,
-        .gate-tooltip td {
-            padding: 1px 5px;
-            text-align: center;
-        }
+		.gate-tooltip th,
+		.gate-tooltip td {
+			padding: 1px 5px;
+			text-align: center
+		}
 
-        .gate-tooltip th {
-            color: var(--color-true);
-            border-bottom: 1px solid var(--bg-glass)
-        }
+		.gate-tooltip th {
+			color: var(--color-true);
+			border-bottom: 1px solid var(--border-glass)
+		}
 
-        .gate-tooltip td.v1 {
-            color: var(--color-true)
-        }
+		.gate-tooltip td.v1 {
+			color: var(--color-true)
+		}
 
-        .node-output {
-            width: 72px;
-            height: 72px;
-            background: var(--color-gate-bg);
-            border: 1.5px solid var(--color-gate-border);
-            border-radius: 50%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 2px;
-            transition: border-color .3s var(--ease-expo), box-shadow .4s var(--ease-expo), background .3s var(--ease-expo)
-        }
+		.node-output {
+			width: 72px;
+			height: 72px;
+			background: var(--color-gate-bg);
+			border: 1.5px solid var(--color-gate-border);
+			border-radius: 50%;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			gap: 2px;
+			transition: border-color .3s var(--ease-expo), box-shadow .4s var(--ease-expo), background .3s var(--ease-expo)
+		}
 
-        .node-output.state-true {
-            border-color: var(--color-true);
-            background: rgba(0, 240, 255, 0.06);
-            box-shadow: var(--color-true-glow);
-            animation: led-breathe 2.2s ease-in-out infinite
-        }
+		.node-output.state-true {
+			border-color: var(--color-true);
+			background: rgba(0, 240, 255, 0.06);
+			box-shadow: var(--color-true-glow);
+			animation: led-breathe 2.2s ease-in-out infinite
+		}
 
-        @keyframes led-breathe {
-            0%,
-            100% {box-shadow: 0 0 20px rgba(0, 240, 255, 0..35), 0 0 50px rgba(0, 240, 255, 0.08)
-            }
-            50% {box-shadow: 0 0 30px rgba(0, 240, 255, 0.5), 0 0 70px rgba(0, 240, 255, 0.12)
-            }
-        }
+		@keyframes led-breathe {
 
-        .node-output.node-label {
-            font-size: .7rem;
-            font-weight: 600;
-            color: var(--color-text-dim);
-            transition: color .3s var(--ease-expo)
-        }
+			0%,
+			100% {
+				box-shadow: 0 0 20px rgba(0, 240, 255, 0.35), 0 0 50px rgba(0, 240, 255, 0.08)
+			}
 
-        .node-output.state-true .node-label {
-            color: var(--color-true);
-        }
+			50% {
+				box-shadow: 0 0 30px rgba(0, 240, 255, 0.5), 0 0 70px rgba(0, 240, 255, 0.12)
+			}
+		}
 
-        .node-output .output-val {
-            font-size: 1rem;
-            font-weight:600;
-            color: var(--color-text-dim);
-            transition: color .3s var(--ease-expo);
-        }
+		.node-output .node-label {
+			font-size: .7rem;
+			font-weight: 600;
+			color: var(--color-text-dim);
+			transition: color .3s var(--ease-expo)
+		}
 
-        .node-output.state-true .output-val {
-            color: var(--color-true)
-        }
+		.node-output.state-true .node-label {
+			color: var(--color-true)
+		}
 
-        .node-output::before{
-            content:'';
-            position: absolute;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: radial-gradient(circle at 40% 40%, rgba(255, 255, 255 0.1), transparent);
-            top: 10x;
-            left: 16px;
-            pointer-events: none
-        }
+		.node-output .output-val {
+			font-size: 1rem;
+			font-weight: 600;
+			color: var(--color-text-dim);
+			transition: color .3s var(--ease-expo)
+		}
 
-        .node-output.selected::after {
-            border-radius: 50%
-        }
+		.node-output.state-true .output-val {
+			color: var(--color-true)
+		}
 
-        .port {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: var(--bg-secondary);
-            border: 1.5px solid var(--color-gate-border);
-            cursor: crosshair;
-            z-index: 20;
-            transition: background .2s var(--ease-expo), border-color .2s var(--ease-expo), box-shadow .2s var(--ease-expo)
-        }
+		.node-output::before {
+			content: '';
+			position: absolute;
+			width: 18px;
+			height: 18px;
+			border-radius: 50%;
+			background: radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.1), transparent);
+			top: 10px;
+			left: 16px;
+			pointer-events: none
+		}
 
-        .port::after {
-            content: '';
-            position: absolute;
-            inset: -10px;
-            border: 50%
-        }
+		.node-output.selected::after {
+			border-radius: 50%
+		}
 
-x		.port:hover,
+		.port {
+			position: absolute;
+			width: 10px;
+			height: 10px;
+			border-radius: 50%;
+			background: var(--bg-secondary);
+			border: 1.5px solid var(--color-gate-border);
+			cursor: crosshair;
+			z-index: 20;
+			transition: background .2s var(--ease-expo), border-color .2s var(--ease-expo), box-shadow .2s var(--ease-expo)
+		}
+
+		.port::after {
+			content: '';
+			position: absolute;
+			inset: -10px;
+			border-radius: 50%
+		}
+
+		.port:hover,
 		.port.highlight {
 			border-color: var(--color-accent);
 			background: rgba(123, 97, 255, 0.25);
@@ -565,54 +587,54 @@ x		.port:hover,
 			top: calc(50% - 5px)
 		}
 
-        .node-output .port.port-in {
-            left: -5px;
-            top: calc(50% - 5px)
-        }
+		.node-output .port.port-in {
+			left: -5px;
+			top: calc(50% - 5px)
+		}
 
-        .node-gate .port.port-in-a {
-            left: -5px;
-            top: calc(22% - 5px)
-        }
+		.node-gate .port.port-in-a {
+			left: -5px;
+			top: calc(22% - 5px)
+		}
 
-        .node-gate .port.port-in-b {
-            left: -5px;
-            top: calc(66% - 5px)
-        }
+		.node-gate .port.port-in-b {
+			left: -5px;
+			top: calc(66% - 5px)
+		}
 
-        .node-gate .port.port-out {
-            left: calc(100% - 5px);
-            top: calc(50% - 5px)
-        }
+		.node-gate .port.port-out {
+			left: calc(100% - 5px);
+			top: calc(50% - 5px)
+		}
 
-        .node-gate[data-gate-type="NOT"] .port.port-in-b {
-          opacity: .12;
-          pointer-events: none;
-        }
+		.node-gate[data-type="NOT"] .port.port-in-b {
+			opacity: .12;
+			pointer-events: none
+		}
 
-        .delete-hint {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            width: 18px;
-            height: 18px;
-            background: var(--color-danger);
-            border-radius: 50%;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 30;
-            font-size: .55rem;
-            color: white;
-            font-weight: 600;
-            line-height: 1;
-            box-shadow: var(--color-danger-glow);
-            border: none;
-            font-family: var(--font-mono);
-        }
+		.delete-hint {
+			position: absolute;
+			top: -8px;
+			right: -8px;
+			width: 18px;
+			height: 18px;
+			background: var(--color-danger);
+			border-radius: 50%;
+			display: none;
+			align-items: center;
+			justify-content: center;
+			cursor: pointer;
+			z-index: 30;
+			font-size: .55rem;
+			color: white;
+			font-weight: 600;
+			line-height: 1;
+			box-shadow: var(--color-danger-glow);
+			border: none;
+			font-family: var(--font-mono)
+		}
 
-        .delete-hint:focus-visible {
+		.delete-hint:focus-visible {
 			outline: 2px solid white;
 			outline-offset: 2px
 		}
@@ -650,61 +672,61 @@ x		.port:hover,
 			margin-bottom: .2rem
 		}
 
-        .tool-btn {
-            width: 48px;
-            height: 42px;
-            background: var(--color-gate-bg);
-            border: 1px solid var(--color-gate-border);
-            border-radius: 8px;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 2px;
-            color: var(--color-text-dim);
-            transition: all .25s var(--ease-expo);
-            font-family: var(--font-mono);
-        }
+		.tool-btn {
+			width: 48px;
+			height: 42px;
+			background: var(--color-gate-bg);
+			border: 1px solid var(--color-gate-border);
+			border-radius: 8px;
+			cursor: pointer;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			gap: 2px;
+			color: var(--color-text-dim);
+			transition: all .25s var(--ease-expo);
+			font-family: var(--font-mono)
+		}
 
-        .tool-btn:hover {
-            border-color: var(--color-accent);
-            color: var(--color-accent);
-            box-shadow: var(--color-accent-glow);
-            transform: scale(1.00)
-        }
+		.tool-btn:hover {
+			border-color: var(--color-accent);
+			color: var(--color-accent);
+			box-shadow: var(--color-accent-glow);
+			transform: scale(1.08)
+		}
 
-        .tool-btn:focus-visible {
-            outline: 2px solid var(--color-accent);
-            outline-offset: 2px;
-        }
+		.tool-btn:focus-visible {
+			outline: 2px solid var(--color-accent);
+			outline-offset: 2px
+		}
 
-        .tool-btn:active {
-            transform: scale(.95)
-        }
+		.tool-btn:active {
+			transform: scale(.95)
+		}
 
-        .tool-btn svg {
-            width: 22px;
-            height: 16px
-        }
+		.tool-btn svg {
+			width: 22px;
+			height: 16px
+		}
 
-        .tool-btn .tool-label {
-            font-size: .4rem;
-            font: weight 600px;
-            letter-spacing: .06em
-        }
+		.tool-btn .tool-label {
+			font-size: .4rem;
+			font-weight: 600;
+			letter-spacing: .06em
+		}
 
-        .truth-panel {
-            position: fixed;
-            bottom: 1rem;
-            right: 1rem;
-            z-index: 100;
-            max-width: 400px;
-            width: 92vw;
-            font-family: var(--font-mono)
-        }
+		.truth-panel {
+			position: fixed;
+			bottom: 1rem;
+			right: 1rem;
+			z-index: 100;
+			max-width: 400px;
+			width: 92vw;
+			font-family: var(--font-mono)
+		}
 
-        .truth-panel summary {
+		.truth-panel summary {
 			font-family: var(--font-sans);
 			font-size: .65rem;
 			font-weight: 500;
@@ -724,7 +746,7 @@ x		.port:hover,
 			transition: all .3s var(--ease-expo)
 		}
 
-        .truth-panel summary::-webkit-details-marker {
+		.truth-panel summary::-webkit-details-marker {
 			display: none
 		}
 
@@ -861,27 +883,27 @@ x		.port:hover,
 			margin-bottom: .4rem
 		}
 
-        .inspector-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 2px 0;
-            gap: .5rem
-        }
+		.inspector-row {
+			display: flex;
+			justify-content: space-between;
+			padding: 2px 0;
+			gap: .5rem
+		}
 
-        .inspector-key {
-            color: var(--color-text-dim)
-        }
+		.inspector-key {
+			color: var(--color-text-dim)
+		}
 
-        .inspector-val {
-            color: var(--color-text);
-            font-weight: 600
-        }
+		.inspector-val {
+			color: var(--color-text);
+			font-weight: 600
+		}
 
-        .inspector-val.val-true {
-            color: var(--color-true)
-        }
+		.inspector-val.val-true {
+			color: var(--color-true)
+		}
 
-        .zoom-indicator {
+		.zoom-indicator {
 			position: fixed;
 			bottom: 1rem;
 			left: 50%;
@@ -897,7 +919,7 @@ x		.port:hover,
 			opacity: .5
 		}
 
-        .undo-toast {
+		.undo-toast {
 			position: fixed;
 			bottom: 3.5rem;
 			left: 50%;
@@ -919,30 +941,30 @@ x		.port:hover,
 			transition: all .3s var(--ease-expo)
 		}
 
-        .undo-toast.visible {
-            opacity: 1;
-            pointer-events: auto;
-            transform: translateX(-50%) translateY(0)
-        }
+		.undo-toast.visible {
+			opacity: 1;
+			pointer-events: auto;
+			transform: translateX(-50%) translateY(0)
+		}
 
-        .undo-toast-btn {
-            font-family: var(--font-mono);
-            font-size: .55rem;
-            font-weight: 600;
-            color: var(--color-accent);
-            background: none;
-            border: 1px solid rgba(123,97, 255, 0.3);
-            border-radius: 6px;
-            padding: .25rem .6rem;
-            cursor: pointer;
-            transition: all .2s var(--ease-expo)
-        }
+		.undo-toast-btn {
+			font-family: var(--font-mono);
+			font-size: .55rem;
+			font-weight: 600;
+			color: var(--color-accent);
+			background: none;
+			border: 1px solid rgba(123, 97, 255, 0.3);
+			border-radius: 6px;
+			padding: .25rem .6rem;
+			cursor: pointer;
+			transition: all .2s var(--ease-expo)
+		}
 
-        .undo-toast-btn:hover {
-            background: rgba(123, 97, 255, 0.1)
-        }
-        
-        .undo-toast-btn:focus-visible {
+		.undo-toast-btn:hover {
+			background: rgba(123, 97, 255, 0.1)
+		}
+
+		.undo-toast-btn:focus-visible {
 			outline: 2px solid var(--color-accent);
 			outline-offset: 2px
 		}
@@ -960,42 +982,47 @@ x		.port:hover,
 			box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4)
 		}
 
-        .content-menu.visible {
-            display: block
-        }
+		.context-menu.visible {
+			display: block
+		}
 
-        .ctx-item {
-            font-family: var(--font-mono);
-            font-size: .6rem;
-            color: var(--color-text-dim);
-            padding: .4rem .7rem;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all .15s var(--ease-expo);
-            display: block;
-            width: 100%;
-            text-align: left;
-            background: none;
-            border: none;
-        }
+		.ctx-item {
+			font-family: var(--font-mono);
+			font-size: .6rem;
+			color: var(--color-text-dim);
+			padding: .4rem .7rem;
+			border-radius: 6px;
+			cursor: pointer;
+			transition: all .15s var(--ease-expo);
+			display: block;
+			width: 100%;
+			text-align: left;
+			background: none;
+			border: none
+		}
 
-        .ctx-item:hover {
-            background: rgba(123, 97, 255, 0.1);
-            color: var(--color-accent)
-        }
+		.ctx-item:hover {
+			background: rgba(123, 97, 255, 0.1);
+			color: var(--color-accent)
+		}
 
-       .ctx-item.ctx-changer:hover {
-            background: rgba(255, 60, 102, 0.1);
-            color: var(--color-danger)
-       }
+		.ctx-item:focus-visible {
+			outline: 2px solid var(--color-accent);
+			outline-offset: -2px
+		}
 
-       .ctx-sep {
-        height: 1px;
-        background: var(--border-glass);
-        margin: .3rem 0
-       }
+		.ctx-item.ctx-danger:hover {
+			background: rgba(255, 68, 102, 0.1);
+			color: var(--color-danger)
+		}
 
-       @keyframes gate-morph {
+		.ctx-sep {
+			height: 1px;
+			background: var(--border-glass);
+			margin: .3rem 0
+		}
+
+		@keyframes gate-morph {
 			0% {
 				transform: scale(1) rotate(0)
 			}
@@ -1056,67 +1083,201 @@ x		.port:hover,
 				display: none
 			}
 		}
-    </style>
+	</style>
 </head>
 
 <body>
-    <header class="top-bar" role="banner">
-        <span class="app-title">Logic Loom</span>
-        <div class="top-action">
-            <button class="action-btn" id="btn-undo" aria-label="undo (Crtl+Z)" disabled>Undo</button>
-            <button class="action-btn" id="btn-redo" aria-label="redo (Crtl+Y)" disabled>Redo</button>
-            <button class="action-btn" id="btn-save" aria-label="save circuit">Save</button>
-            <button class="action-btn" id="btn-load" aria-label="load circuit">Load</button>
-            <button class="action-btn" id="btn-randomize" aria-label="randomize inputs">Randomize</button>
-            <button class="action-btn" id="btn-clear-wires" aria-label="Clear all wires">Clear Wires</button>
-            <button class="action-btn" id="btn-reset" aria-label="Reset circuit">Reset All</button>
-        </div>
-    </header>
+	<header class="top-bar" role="banner">
+		<span class="app-title">Logic-Loom</span>
+		<div class="top-actions">
+			<button class="action-btn" id="btn-undo" aria-label="Undo (Ctrl+Z)" disabled>Undo</button>
+			<button class="action-btn" id="btn-redo" aria-label="Redo (Ctrl+Y)" disabled>Redo</button>
+			<button class="action-btn" id="btn-save" aria-label="Save circuit to clipboard">Save</button>
+			<button class="action-btn" id="btn-load" aria-label="Load circuit from clipboard">Load</button>
+			<button class="action-btn" id="btn-randomize" aria-label="Randomize inputs">Randomize</button>
+			<button class="action-btn" id="btn-clear-wires" aria-label="Clear all wires">Clear Wires</button>
+			<button class="action-btn danger" id="btn-reset" aria-label="Reset circuit">Reset All</button>
+		</div>
+	</header>
 
-    <nav class="toolbox" id="toolbox" aria-label="Component palette" role="toolbar">
-        <span class="toolbox-label">Add</span>
-        <button class="tool-btn" data-spawn="INPUT" aria-label="Add input">
-            <svg viewBox="0 0 22 16" aria-hidden="true">
-                <circle cx="7" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="1.2" />
-                <line x1="11" y1="8" x2="20" y2="8" stroke="currentColor" stroke-width="1.2" />
+	<nav class="toolbox" id="toolbox" aria-label="Component palette" role="toolbar">
+		<span class="toolbox-label">Add</span>
+		<button class="tool-btn" data-spawn="INPUT" aria-label="Add input"><svg viewBox="0 0 22 16" aria-hidden="true">
+				<circle cx="7" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="1.2" />
+				<line x1="11" y1="8" x2="20" y2="8" stroke="currentColor" stroke-width="1.2" />
 			</svg><span class="tool-label">IN</span></button>
 		<button class="tool-btn" data-spawn="AND" aria-label="Add AND gate"><svg viewBox="0 0 22 16" aria-hidden="true">
 				<path d="M2 1H11A7 7 0 0 1 11 15H2Z" fill="none" stroke="currentColor" stroke-width="1.2" />
-                </svg><span class="tool-label">AND</span></button>
-                <button class="tool-btn" data-spawn="OR" aria-label="Add OR gate"><svg viewBox="0 0 22 16" aria-hidden="true">
-                <path d="M2 1Q6 8 2 15Q12 15 18 8Q12 1 2 1Z" fill="none" stroke="currentColor" stroke-width="1.2" />
-                </svg><span class="tool-label">OR</span></button>
-                <button class="tool-btn" data-spawn="XOR" aria-label="Add XOR gate">
-                    <svg view="0 0 22 16" aria-hidden="true">
-                        <path d="M4 1Q8 8 4 15Q14 15 20 8Q14 1 4 1Z" fill="none" stroke="currentColor" stroke-width="1.2" />
-                        <path d="M1 1Q5 8 1 15"fill="none" stroke="currentColor" stroke-width="1.2" />
-                    </svg><span class="tool-label">XOR</span></button>
-                    <button class="tool-btn" data-spawn="NAND" aria-label="Add NAND gate"><svg viewBox="0 0 24 16" aria-hidden="true">
-                        <path d="M2 1H10A7 7 0 0 1 10 15H2Z" fill="none" stroke="currentColor" stroke-width="1.2" />
-                        <circle cx="19" cy="8" r="2" fill="none" stroke="currentColor" stroke-width="1.2" />
-                    </svg> <span class="tool-label">NAND</span></button>
-                    <button class="tool-btn" data-spawn="NOT" aria-label="Add NOT gate"> <svg viewBox="0 0 22 16" aria-hidden="true">
-                        <circle cx="19" cy="8" r="2" fill="none" stroke="currentColor" stroke-width="1.2" />
-                        </svg> <span class="tool-label">NOT</span></button>
-                        <button class="tool-btn" data-spawn="OUTPUT" aria-label="Add output"><svg viewBox="0 0 22 16" aria-hidden="true">
+			</svg><span class="tool-label">AND</span></button>
+		<button class="tool-btn" data-spawn="OR" aria-label="Add OR gate"><svg viewBox="0 0 22 16" aria-hidden="true">
+				<path d="M2 1Q6 8 2 15Q12 15 18 8Q12 1 2 1Z" fill="none" stroke="currentColor" stroke-width="1.2" />
+			</svg><span class="tool-label">OR</span></button>
+		<button class="tool-btn" data-spawn="XOR" aria-label="Add XOR gate"><svg viewBox="0 0 22 16" aria-hidden="true">
+				<path d="M4 1Q8 8 4 15Q14 15 20 8Q14 1 4 1Z" fill="none" stroke="currentColor" stroke-width="1.2" />
+				<path d="M1 1Q5 8 1 15" fill="none" stroke="currentColor" stroke-width="1.2" />
+			</svg><span class="tool-label">XOR</span></button>
+		<button class="tool-btn" data-spawn="NAND" aria-label="Add NAND gate"><svg viewBox="0 0 24 16" aria-hidden="true">
+				<path d="M2 1H10A7 7 0 0 1 10 15H2Z" fill="none" stroke="currentColor" stroke-width="1.2" />
+				<circle cx="19" cy="8" r="2" fill="none" stroke="currentColor" stroke-width="1.2" />
+			</svg><span class="tool-label">NAND</span></button>
+		<button class="tool-btn" data-spawn="NOT" aria-label="Add NOT gate"><svg viewBox="0 0 22 16" aria-hidden="true">
+				<path d="M2 1L16 8L2 15Z" fill="none" stroke="currentColor" stroke-width="1.2" />
+				<circle cx="19" cy="8" r="2" fill="none" stroke="currentColor" stroke-width="1.2" />
+			</svg><span class="tool-label">NOT</span></button>
+		<button class="tool-btn" data-spawn="OUTPUT" aria-label="Add output"><svg viewBox="0 0 22 16" aria-hidden="true">
 				<circle cx="11" cy="8" r="6" fill="none" stroke="currentColor" stroke-width="1.2" />
-                <circle cx="11" cy="8" r="2" fill="currentColor" opacity=".4" />
-                        </svg> <span class="tool-label">OUT</span></button>
-                        </nav>
+				<circle cx="11" cy="8" r="2.5" fill="currentColor" opacity=".4" />
+			</svg><span class="tool-label">OUT</span></button>
+	</nav>
 
-                        <section class="canvas-viewport" id="viewport" role="application" aria-label="Circuit canvas">
-                            <div class="canvas-world" id="world">
-                                <canvas class="wire-canvas" id="wireCanvas"></canvas>
-                                <svg class="wire-hit-layer" id="wire-hit-layer" xmlns="https://www.w3.org/2000/svg" aria-hidden="true"></svg>
-                                <svg class="wire-temp-layer" id="wire-temp-layer" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
+	<section class="canvas-viewport" id="viewport" role="application" aria-label="Circuit canvas">
+		<div class="canvas-world" id="world">
+			<canvas class="wire-canvas" id="wire-canvas"></canvas>
+			<svg class="wire-hit-layer" id="wire-hit-layer" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
+			<svg class="wire-temp-layer" id="wire-temp-layer" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
 		</div>
 	</section>
 
-    <div class="content-menu" id="context-menu" role="menu" aria-label="Node actions">
-        <button class="ctx-item" data-action="cycle" role="menuitem"> Cycle Gate Type</button>
-        <button class="ctx-item" data-action="duplicate" role="menuitem">Duplicate</button>
+	<div class="context-menu" id="context-menu" role="menu" aria-label="Node actions">
+		<button class="ctx-item" data-action="cycle" role="menuitem">Cycle Gate Type</button>
+		<button class="ctx-item" data-action="duplicate" role="menuitem">Duplicate</button>
 		<div class="ctx-sep" role="separator"></div>
 		<button class="ctx-item ctx-danger" data-action="delete" role="menuitem">Delete Node</button>
 	</div>
 
-    <aside class="inspector hidden" id="inspector" aria-live="polite" aria- label="signal inspector">
+	<aside class="inspector hidden" id="inspector" aria-live="polite" aria-label="Signal inspector">
+		<div class="inspector-title">Signal Inspector</div>
+		<div id="inspector-content"></div>
+	</aside>
+
+	<div class="zoom-indicator" id="zoom-indicator" aria-live="polite" aria-atomic="true">100%</div>
+	<div class="undo-toast" id="undo-toast" role="alert" aria-live="assertive">
+		<span id="undo-toast-msg">Action undone</span>
+		<button class="undo-toast-btn" id="undo-toast-btn">Undo</button>
+	</div>
+	<div id="sr-announce" class="sr-only" aria-live="assertive" aria-atomic="true"></div>
+
+	<details class="truth-panel" id="truth-panel" open>
+		<summary>Truth Table</summary>
+		<div class="truth-table-wrap" role="region" aria-label="Truth table results">
+			<div id="truth-table-container">
+				<p class="truth-empty">Add inputs and outputs to generate a truth table.</p>
+			</div>
+		</div>
+	</details>
+
+	<script>
+		(() => {
+			'use strict';
+			// ── Constants ──
+			const GATE_TYPES = Object.freeze(['AND', 'OR', 'XOR', 'NAND', 'NOT']);
+			const MAX_TT_INPUTS = 6;
+			const WIRE_CP_FACTOR = 0.45;
+			const WIRE_CP_MIN = 50;
+			const WIRE_COLORS = Object.freeze({
+				true: '#00f0ff',
+				false: '#1e1e32',
+				trueGlow: 'rgba(0,240,255,0.25)'
+			});
+			const WIRE_ANIM_SPEED = 0.4; // pixels per ms
+			const GATE_LOGIC = Object.freeze({
+				AND: (a, b) => a && b,
+				OR: (a, b) => a || b,
+				XOR: (a, b) => Boolean(a) !== Boolean(b),
+				NAND: (a, b) => !(a && b),
+				NOT: (a) => !a
+			});
+			const GATE_SVGS = Object.freeze({
+				AND: '<svg viewBox="0 0 40 28" aria-hidden="true"><path d="M4 2H20A14 14 0 0 1 20 26H4Z" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>',
+				OR: '<svg viewBox="0 0 40 28" aria-hidden="true"><path d="M4 2Q12 14 4 26Q22 26 34 14Q22 2 4 2Z" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>',
+				XOR: '<svg viewBox="0 0 40 28" aria-hidden="true"><path d="M6 2Q14 14 6 26Q24 26 36 14Q24 2 6 2Z" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M2 2Q10 14 2 26" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>',
+				NAND: '<svg viewBox="0 0 42 28" aria-hidden="true"><path d="M4 2H18A14 14 0 0 1 18 26H4Z" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="35" cy="14" r="3" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>',
+				NOT: '<svg viewBox="0 0 40 28" aria-hidden="true"><path d="M4 2L30 14L4 26Z" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="34" cy="14" r="3" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>'
+			});
+			const GATE_TABLES = Object.freeze({
+				AND: [
+					[0, 0, 0],
+					[0, 1, 0],
+					[1, 0, 0],
+					[1, 1, 1]
+				],
+				OR: [
+					[0, 0, 0],
+					[0, 1, 1],
+					[1, 0, 1],
+					[1, 1, 1]
+				],
+				XOR: [
+					[0, 0, 0],
+					[0, 1, 1],
+					[1, 0, 1],
+					[1, 1, 0]
+				],
+				NAND: [
+					[0, 0, 1],
+					[0, 1, 1],
+					[1, 0, 1],
+					[1, 1, 0]
+				],
+				NOT: [
+					[0, 1],
+					[1, 0]
+				]
+			});
+			const _esc = document.createElement('div');
+
+			function escHTML(s) {
+				_esc.textContent = s || '';
+				return _esc.innerHTML;
+			}
+
+			function srAnnounce(m) {
+				const e = document.getElementById('sr-announce');
+				if (e) {
+					e.textContent = '';
+					requestAnimationFrame(() => {
+						e.textContent = m;
+					});
+				}
+			}
+			// ── Undo Manager (data-only commands) ──
+			class UndoManager {
+				constructor(max = 60) {
+					this._u = [];
+					this._r = [];
+					this._max = max;
+					this._listeners = [];
+				}
+				push(cmd) {
+					this._u.push(cmd);
+					if (this._u.length > this._max) this._u.shift();
+					this._r.length = 0;
+					this._notify();
+				}
+				undo() {
+					const c = this._u.pop();
+					if (!c) return null;
+					c.undo();
+					this._r.push(c);
+					this._notify();
+					return c;
+				}
+                redo() {
+                    const c = this._r.pop();
+                    if (!c) return null;
+                    c.redo();
+                    this._u.push(c);
+                    this._notify();
+                    return c;
+                }
+                get canUndo() {
+                    return this.u.length > 0;
+                }
+                get canRedo() {
+                    return this._r.length > 0;
+                }
+                clear() {
+                    this._u.length = 0;
+                    this._r.length = 0;
+                    this._notify();
+                }             
