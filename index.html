@@ -960,5 +960,163 @@ x		.port:hover,
 			box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4)
 		}
 
-        
+        .content-menu.visible {
+            display: block
+        }
+
+        .ctx-item {
+            font-family: var(--font-mono);
+            font-size: .6rem;
+            color: var(--color-text-dim);
+            padding: .4rem .7rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all .15s var(--ease-expo);
+            display: block;
+            width: 100%;
+            text-align: left;
+            background: none;
+            border: none;
+        }
+
+        .ctx-item:hover {
+            background: rgba(123, 97, 255, 0.1);
+            color: var(--color-accent)
+        }
+
+       .ctx-item.ctx-changer:hover {
+            background: rgba(255, 60, 102, 0.1);
+            color: var(--color-danger)
+       }
+
+       .ctx-sep {
+        height: 1px;
+        background: var(--border-glass);
+        margin: .3rem 0
+       }
+
+       @keyframes gate-morph {
+			0% {
+				transform: scale(1) rotate(0)
+			}
+
+			40% {
+				transform: scale(.78) rotate(-12deg)
+			}
+
+			100% {
+				transform: scale(1) rotate(0)
+			}
+		}
+
+		.gate-symbol.morphing {
+			animation: gate-morph .35s var(--ease-spring)
+		}
+
+		.sr-only {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			padding: 0;
+			margin: -1px;
+			overflow: hidden;
+			clip: rect(0, 0, 0, 0);
+			white-space: nowrap;
+			border: 0
+		}
+
+		.selection-box {
+			position: absolute;
+			border: 1.5px dashed var(--color-accent);
+			background: rgba(123, 97, 255, 0.06);
+			pointer-events: none;
+			z-index: 50;
+			border-radius: 2px
+		}
+
+		@media(max-width:768px) {
+			.toolbox {
+				top: auto;
+				bottom: 5rem;
+				left: 50%;
+				transform: translateX(-50%);
+				flex-direction: row
+			}
+
+			.toolbox-label {
+				display: none
+			}
+
+			.truth-panel {
+				max-width: 95vw;
+				right: .5rem
+			}
+
+			.inspector {
+				display: none
+			}
+		}
     </style>
+</head>
+
+<body>
+    <header class="top-bar" role="banner">
+        <span class="app-title">Logic Loom</span>
+        <div class="top-action">
+            <button class="action-btn" id="btn-undo" aria-label="undo (Crtl+Z)" disabled>Undo</button>
+            <button class="action-btn" id="btn-redo" aria-label="redo (Crtl+Y)" disabled>Redo</button>
+            <button class="action-btn" id="btn-save" aria-label="save circuit">Save</button>
+            <button class="action-btn" id="btn-load" aria-label="load circuit">Load</button>
+            <button class="action-btn" id="btn-randomize" aria-label="randomize inputs">Randomize</button>
+            <button class="action-btn" id="btn-clear-wires" aria-label="Clear all wires">Clear Wires</button>
+            <button class="action-btn" id="btn-reset" aria-label="Reset circuit">Reset All</button>
+        </div>
+    </header>
+
+    <nav class="toolbox" id="toolbox" aria-label="Component palette" role="toolbar">
+        <span class="toolbox-label">Add</span>
+        <button class="tool-btn" data-spawn="INPUT" aria-label="Add input">
+            <svg viewBox="0 0 22 16" aria-hidden="true">
+                <circle cx="7" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="1.2" />
+                <line x1="11" y1="8" x2="20" y2="8" stroke="currentColor" stroke-width="1.2" />
+			</svg><span class="tool-label">IN</span></button>
+		<button class="tool-btn" data-spawn="AND" aria-label="Add AND gate"><svg viewBox="0 0 22 16" aria-hidden="true">
+				<path d="M2 1H11A7 7 0 0 1 11 15H2Z" fill="none" stroke="currentColor" stroke-width="1.2" />
+                </svg><span class="tool-label">AND</span></button>
+                <button class="tool-btn" data-spawn="OR" aria-label="Add OR gate"><svg viewBox="0 0 22 16" aria-hidden="true">
+                <path d="M2 1Q6 8 2 15Q12 15 18 8Q12 1 2 1Z" fill="none" stroke="currentColor" stroke-width="1.2" />
+                </svg><span class="tool-label">OR</span></button>
+                <button class="tool-btn" data-spawn="XOR" aria-label="Add XOR gate">
+                    <svg view="0 0 22 16" aria-hidden="true">
+                        <path d="M4 1Q8 8 4 15Q14 15 20 8Q14 1 4 1Z" fill="none" stroke="currentColor" stroke-width="1.2" />
+                        <path d="M1 1Q5 8 1 15"fill="none" stroke="currentColor" stroke-width="1.2" />
+                    </svg><span class="tool-label">XOR</span></button>
+                    <button class="tool-btn" data-spawn="NAND" aria-label="Add NAND gate"><svg viewBox="0 0 24 16" aria-hidden="true">
+                        <path d="M2 1H10A7 7 0 0 1 10 15H2Z" fill="none" stroke="currentColor" stroke-width="1.2" />
+                        <circle cx="19" cy="8" r="2" fill="none" stroke="currentColor" stroke-width="1.2" />
+                    </svg> <span class="tool-label">NAND</span></button>
+                    <button class="tool-btn" data-spawn="NOT" aria-label="Add NOT gate"> <svg viewBox="0 0 22 16" aria-hidden="true">
+                        <circle cx="19" cy="8" r="2" fill="none" stroke="currentColor" stroke-width="1.2" />
+                        </svg> <span class="tool-label">NOT</span></button>
+                        <button class="tool-btn" data-spawn="OUTPUT" aria-label="Add output"><svg viewBox="0 0 22 16" aria-hidden="true">
+				<circle cx="11" cy="8" r="6" fill="none" stroke="currentColor" stroke-width="1.2" />
+                <circle cx="11" cy="8" r="2" fill="currentColor" opacity=".4" />
+                        </svg> <span class="tool-label">OUT</span></button>
+                        </nav>
+
+                        <section class="canvas-viewport" id="viewport" role="application" aria-label="Circuit canvas">
+                            <div class="canvas-world" id="world">
+                                <canvas class="wire-canvas" id="wireCanvas"></canvas>
+                                <svg class="wire-hit-layer" id="wire-hit-layer" xmlns="https://www.w3.org/2000/svg" aria-hidden="true"></svg>
+                                <svg class="wire-temp-layer" id="wire-temp-layer" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
+		</div>
+	</section>
+
+    <div class="content-menu" id="context-menu" role="menu" aria-label="Node actions">
+        <button class="ctx-item" data-action="cycle" role="menuitem"> Cycle Gate Type</button>
+        <button class="ctx-item" data-action="duplicate" role="menuitem">Duplicate</button>
+		<div class="ctx-sep" role="separator"></div>
+		<button class="ctx-item ctx-danger" data-action="delete" role="menuitem">Delete Node</button>
+	</div>
+
+    <aside class="inspector hidden" id="inspector" aria-live="polite" aria- label="signal inspector">
