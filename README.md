@@ -24,7 +24,9 @@ Logic Loom is an interactive web-based digital logic circuit simulator built wit
 - CSS3
 - JavaScript (Vanilla)
 
-## 📸 Screenshots(./assets/screenshot.png)
+## 📸 Screenshots
+
+![Logic Loom circuit editor screenshot](./screenshot.png)
 
 ## 📂 Project Structure
 ```
@@ -33,18 +35,18 @@ Logic-Loom/
 ├── index.html
 ├── style.css
 ├── script.js
-├── assets/
+├── screenshot.png
 └── README.md
 ```
 
 ## 🛠️ Installation
 Clone the repository:
 ```bash
-git clone https://github.com/yourusername/logic-loom.git
+git clone https://github.com/Zenskistudios/Logic-Loom.git
 ```
 Open the project folder:
 ```bash
-cd logic-loom
+cd Logic-Loom
 ```
 Then open `index.html` in your browser.
 
