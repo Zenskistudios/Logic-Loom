@@ -24,9 +24,7 @@ Logic Loom is an interactive web-based digital logic circuit simulator built wit
 - CSS3
 - JavaScript (Vanilla)
 
-## 📸 Screenshots
-
-![Logic Loom circuit editor screenshot](./assets/screenshot.png)
+## 📸 Screenshots(./assets/screenshot.png)
 
 ## 📂 Project Structure
 ```
