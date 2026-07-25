@@ -78,3 +78,4 @@ This project is licensed under the MIT License.
 - GitHub: https://github.com/Zenskistudios
 
 ---
+⭐ If you like this project, consider giving it a star!
