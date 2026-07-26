@@ -35,7 +35,7 @@ The project is focused on creating an intuitive environment where users can buil
 
 ## 📸 Screenshot
 
-![Logic Loom Interface](./screenshot.png)
+![Logic Loom Interface](./Logic_loom.gif)
 
 ---
 
