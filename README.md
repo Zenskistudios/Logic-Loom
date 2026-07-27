@@ -31,6 +31,7 @@ Watching my father, an electrical engineer, work with digital logic and circuit 
 '''bash
 git clone https://github.com/Zenskistudios/Logic-Loom.git
 '''
+
 2. Open the project folder on Vscode:
 
 '''bash
