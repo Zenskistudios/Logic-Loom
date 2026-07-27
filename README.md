@@ -1,142 +1,44 @@
-# 🧠 Logic Loom
+# Logic Loon
 
-**Logic Loom** is an interactive web-based digital logic circuit simulator built with **HTML, CSS, and JavaScript**.
+Logic Loom is a project building to learn more about HTML, CSS, JavaScript, and digital logic.
 
-The project is focused on creating an intuitive environment where users can build, experiment with, and eventually simulate digital logic circuits using common logic gates. It is currently in active development, with the interface and core architecture completed while simulation features continue to be implemented.
+The idea is to create a web application where users can build digital logic circuits using gates like AND, OR, NOT, NAND, NOR, and XOR.
 
----
+## What I've built so far
 
-## ✨ Current Features
+- Designed the user interface
+- Created the logic gate toolbox
+- Added the top toolbar
+- Separated the project into HTML, CSS, and Javascript files
+- Added a theme picker that saves the selected color using localstorage
+- Made the layout responsive
 
-- Clean and modern dark-themed interface
-- Interactive workspace for building circuits
-- Logic gate toolbox including:
-  - AND
-  - OR
-  - NOT
-  - NAND
-  - NOR
-  - XOR
-- Toolbar with:
-  - Undo
-  - Redo
-  - Save
-  - Load
-  - Randomize
-  - Clear Wires
-  - Reset All
-- Customizable application background
-- Theme persistence using `localStorage`
-- Responsive layout
-- Smooth animations and transitions
-- Organized project structure using separate HTML, CSS, and JavaScript files
+# What I'm working on next
 
----
+- Dragging logic gates
+- Connecting gates with wires
+- Simulating circuit outputs
+- Generating truth tables
 
-## 📸 Screenshot
+# Why I built this 
 
+Watching my father, an electrical engineer, work with digital logic and circuit design inspired me to build **Logic Loom*- a free, web based tool that can eventually help students, hobbyists, and engineers experiment with digital logic circuits without relying on expensive software. I wanted a project that would challange me and help me improve my JavaScript skills while learning more about digital logic.
+
+# How to run it
+
+1. Clone the repository 
+
+'''bash
+git clone https://github.com/Zenskistudios/Logic-Loom.git
+'''
+2. Open the project folder on Vscode:
+
+'''bash
+cd Logic-Loom
+'''
+
+3. Click the link above to open in your web browser.
+
+## Screenshot
 ![Logic Loom Interface](./Logic_loom.gif)
 
----
-
-## 🚀 Tech Stack
-
-- HTML5
-- CSS3
-- Vanilla JavaScript
-- LocalStorage API
-
----
-
-## 📂 Project Structure
-
-```text
-Logic-Loom/
-│
-├── index.html
-├── style.css
-├── script.js
-├── screenshot.png
-├── LICENSE
-└── README.md
-```
-
----
-
-## 🛠️ Getting Started
-
-Clone the repository:
-
-```bash
-git clone https://github.com/Zenskistudios/Logic-Loom.git
-```
-
-Open the project folder:
-
-```bash
-cd Logic-Loom
-```
-
-Launch the project by opening:
-
-```text
-index.html
-```
-
-in your preferred web browser.
-
----
-
-## 🎯 Why I Built This
-
-I created Logic Loom as a personal learning project to strengthen my front-end development skills while exploring how digital logic circuits work.
-
-Instead of relying on complete AI-generated code, I built the project incrementally—learning by implementing each feature myself, debugging issues, organizing the codebase, and improving the user experience step by step.
-
-The goal is not only to build a useful circuit simulator but also to deepen my understanding of JavaScript and software architecture through real-world development.
-
----
-
-## 🗺️ Roadmap
-
-Future versions will include:
-
-- Interactive drag-and-drop improvements
-- Wire connection system
-- Digital signal propagation
-- Logic gate evaluation
-- Truth table generation
-- Additional logic components
-- Export circuits
-- Save and load complete projects
-- Light/Dark theme switching
-- Performance optimizations
-
----
-
-## 🤝 Contributing
-
-Contributions, ideas, and feedback are always welcome.
-
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Open a Pull Request
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License.
-
----
-
-## 👨‍💻 Author
-
-**Taiwo Jegede**
-
-GitHub: https://github.com/Zenskistudios
-
----
-
-⭐ If you found this project interesting, consider giving it a star. Every bit of feedback helps me continue improving Logic Loom.
