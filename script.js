@@ -1,7 +1,7 @@
 (() => {
 			'use strict';
 			// ── Constants ──
-			const GATE_TYPES = Object.freeze(['AND', 'OR', 'XOR', 'NAND', 'NOT']);
+			const GATE_TYPES = Object.freeze(['AND', 'OR', 'XOR', 'NAND', 'NOR', 'NOT']);
 			const MAX_TT_INPUTS = 6;
 			const WIRE_CP_FACTOR = 0.45;
 			const WIRE_CP_MIN = 50;
@@ -16,6 +16,7 @@
 				OR: (a, b) => a || b,
 				XOR: (a, b) => Boolean(a) !== Boolean(b),
 				NAND: (a, b) => !(a && b),
+				NOR: (a, b) => !(a || b),
 				NOT: (a) => !a
 			});
 			const GATE_SVGS = Object.freeze({
@@ -23,6 +24,7 @@
 				OR: '<svg viewBox="0 0 40 28" aria-hidden="true"><path d="M4 2Q12 14 4 26Q22 26 34 14Q22 2 4 2Z" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>',
 				XOR: '<svg viewBox="0 0 40 28" aria-hidden="true"><path d="M6 2Q14 14 6 26Q24 26 36 14Q24 2 6 2Z" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M2 2Q10 14 2 26" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>',
 				NAND: '<svg viewBox="0 0 42 28" aria-hidden="true"><path d="M4 2H18A14 14 0 0 1 18 26H4Z" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="35" cy="14" r="3" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>',
+				NOR: '<svg viewBox="0 0 42 28" aria-hidden="true"><path d="M6 2Q14 14 6 26Q24 26 36 14Q24 2 6 2Z" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="38" cy="14" r="3" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>',
 				NOT: '<svg viewBox="0 0 40 28" aria-hidden="true"><path d="M4 2L30 14L4 26Z" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="34" cy="14" r="3" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>'
 			});
 			const GATE_TABLES = Object.freeze({
@@ -1429,6 +1431,7 @@
 					});
 					document.getElementById('btn-save').addEventListener('click', () => this._saveCircuit());
 					document.getElementById('btn-load').addEventListener('click', () => this._loadCircuit());
+					document.getElementById('btn-export-png').addEventListener('click', () => this._exportPNG());
 					document.getElementById('btn-randomize').addEventListener('click', () => this._randomize());
 					document.getElementById('btn-clear-wires').addEventListener('click', () => this._clearWiresUndo());
 					document.getElementById('btn-reset').addEventListener('click', () => this._reset());
@@ -2091,6 +2094,24 @@
 						srAnnounce('Save failed');
 					}
 				}
+				_exportPNG() {
+    const viewport = document.getElementById("viewport");
+
+    html2canvas(viewport, {
+        backgroundColor: null,
+        scale: 2
+    }).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "logic-loom.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+
+        this._showToast("PNG exported!");
+    }).catch(err => {
+        console.error(err);
+        this._showToast("Export failed");
+    });
+}
 				_loadCircuit() {
 					navigator.clipboard.readText().then(text => {
 						try {

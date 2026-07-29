@@ -17,6 +17,7 @@
     <button class="action-btn" id="btn-redo">Redo</button>
     <button class="action-btn" id="btn-save">Save</button>
     <button class="action-btn" id="btn-load">Load</button>
+	<button class="action-btn" id="btn-export-png">Export PNG</button>
     <button class="action-btn" id="btn-randomize">Randomize</button>
 
     <button class="action-btn" id="themeBtn">Theme</button>
@@ -57,6 +58,10 @@
 				<path d="M2 1H10A7 7 0 0 1 10 15H2Z" fill="none" stroke="currentColor" stroke-width="1.2" />
 				<circle cx="19" cy="8" r="2" fill="none" stroke="currentColor" stroke-width="1.2" />
 			</svg><span class="tool-label">NAND</span></button>
+		<button class="tool-btn" data-spawn="NOR" aria-label="Add NOR gate"><svg viewBox="0 0 24 16" aria-hidden="true">
+			<path d="M4 1Q8 8 4 15Q14 15 20 8Q14 1 4 1Z" fill="none" stroke="currentColor" stroke-width="1.2" />
+			<circle cx="21" cy="8" r="2" fill="none" stroke="currentColor" stroke-width="1.2" />
+		</svg><span class="tool-label">NOR</span></button>
 		<button class="tool-btn" data-spawn="NOT" aria-label="Add NOT gate"><svg viewBox="0 0 22 16" aria-hidden="true">
 				<path d="M2 1L16 8L2 15Z" fill="none" stroke="currentColor" stroke-width="1.2" />
 				<circle cx="19" cy="8" r="2" fill="none" stroke="currentColor" stroke-width="1.2" />
@@ -103,6 +108,7 @@
 		</div>
 	</details>
 
+	<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 	<script src="script.js"></script>
 </body>
 
