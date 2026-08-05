@@ -529,6 +529,11 @@
 						});
 					}
 					this._dirty = true;
+
+					// Wake the renderer if it has gone to  sleep
+					if (!this._running) {
+						this.start();
+					}
 				}
 				removeWire(wireId) {
 					if (!this._wireMap.has(wireId)) return;
