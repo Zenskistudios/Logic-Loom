@@ -1314,7 +1314,10 @@
 						value: false
 					};
 					const result = this.graph.addWire(w);
+					console.log("Wire object:", w);
+					console.log("addWire result:", result);
 					if (!result) {
+						console.error("Wire was rejected by graph.addWire()");
 						this._rejectWire(targetNodeId);
 						this.cancelWiring();
 						return;
