@@ -802,6 +802,10 @@
 				updateWireVisuals(wire) {
 					const src = this.getPortWorldCenter(wire.srcNodeId, wire.srcPort);
 					const dst = this.getPortWorldCenter(wire.dstNodeId, wire.dstPort);
+
+					console.log("SRC", src);
+					console.log("DST", dst);
+					
 					if (!src || !dst) return;
 					// Update canvas wire
 					this.wireCanvas.updateWire(wire.id, src.x, src.y, dst.x, dst.y, wire.value);
