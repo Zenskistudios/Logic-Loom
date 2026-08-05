@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Logic-Loom v3</title>
+	<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+	<header class="top-bar" role="banner">
+		<span class="app-title">Logic-Loom</span>
+		<div class="top-actions">
+    <button class="action-btn" id="btn-undo">Undo</button>
+    <button class="action-btn" id="btn-redo">Redo</button>
+    <button class="action-btn" id="btn-save">Save</button>
+    <button class="action-btn" id="btn-load">Load</button>
+	<button class="action-btn" id="btn-export-png">Export PNG</button>
+    <button class="action-btn" id="btn-randomize">Randomize</button>
+
+    <button class="action-btn" id="themeBtn">Theme</button>
+
+<button class="action-btn" id="resetTheme">
+    Default Theme
+</button>
+
+<input
+    type="color"
+    id="bgPicker"
+        value="#0a0a12"
+        style="display:none;"
+    >
+
+    <button class="action-btn" id="btn-clear-wires">Clear Wires</button>
+    <button class="action-btn danger" id="btn-reset">Reset All</button>
+</div>
+	</header>
+
+	<nav class="toolbox" id="toolbox" aria-label="Component palette" role="toolbar">
+		<span class="toolbox-label">Add</span>
+		<button class="tool-btn" data-spawn="INPUT" aria-label="Add input"><svg viewBox="0 0 22 16" aria-hidden="true">
+				<circle cx="7" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="1.2" />
+				<line x1="11" y1="8" x2="20" y2="8" stroke="currentColor" stroke-width="1.2" />
+			</svg><span class="tool-label">IN</span></button>
+		<button class="tool-btn" data-spawn="AND" aria-label="Add AND gate"><svg viewBox="0 0 22 16" aria-hidden="true">
+				<path d="M2 1H11A7 7 0 0 1 11 15H2Z" fill="none" stroke="currentColor" stroke-width="1.2" />
+			</svg><span class="tool-label">AND</span></button>
+		<button class="tool-btn" data-spawn="OR" aria-label="Add OR gate"><svg viewBox="0 0 22 16" aria-hidden="true">
+				<path d="M2 1Q6 8 2 15Q12 15 18 8Q12 1 2 1Z" fill="none" stroke="currentColor" stroke-width="1.2" />
+			</svg><span class="tool-label">OR</span></button>
+		<button class="tool-btn" data-spawn="XOR" aria-label="Add XOR gate"><svg viewBox="0 0 22 16" aria-hidden="true">
+				<path d="M4 1Q8 8 4 15Q14 15 20 8Q14 1 4 1Z" fill="none" stroke="currentColor" stroke-width="1.2" />
+				<path d="M1 1Q5 8 1 15" fill="none" stroke="currentColor" stroke-width="1.2" />
+			</svg><span class="tool-label">XOR</span></button>
+		<button class="tool-btn" data-spawn="NAND" aria-label="Add NAND gate"><svg viewBox="0 0 24 16" aria-hidden="true">
+				<path d="M2 1H10A7 7 0 0 1 10 15H2Z" fill="none" stroke="currentColor" stroke-width="1.2" />
+				<circle cx="19" cy="8" r="2" fill="none" stroke="currentColor" stroke-width="1.2" />
+			</svg><span class="tool-label">NAND</span></button>
+		<button class="tool-btn" data-spawn="NOR" aria-label="Add NOR gate"><svg viewBox="0 0 24 16" aria-hidden="true">
+			<path d="M4 1Q8 8 4 15Q14 15 20 8Q14 1 4 1Z" fill="none" stroke="currentColor" stroke-width="1.2" />
+			<circle cx="21" cy="8" r="2" fill="none" stroke="currentColor" stroke-width="1.2" />
+		</svg><span class="tool-label">NOR</span></button>
+		<button class="tool-btn" data-spawn="NOT" aria-label="Add NOT gate"><svg viewBox="0 0 22 16" aria-hidden="true">
+				<path d="M2 1L16 8L2 15Z" fill="none" stroke="currentColor" stroke-width="1.2" />
+				<circle cx="19" cy="8" r="2" fill="none" stroke="currentColor" stroke-width="1.2" />
+			</svg><span class="tool-label">NOT</span></button>
+		<button class="tool-btn" data-spawn="OUTPUT" aria-label="Add output"><svg viewBox="0 0 22 16" aria-hidden="true">
+				<circle cx="11" cy="8" r="6" fill="none" stroke="currentColor" stroke-width="1.2" />
+				<circle cx="11" cy="8" r="2.5" fill="currentColor" opacity=".4" />
+			</svg><span class="tool-label">OUT</span></button>
+	</nav>
+
+	<section class="canvas-viewport" id="viewport" role="application" aria-label="Circuit canvas">
+		<div class="canvas-world" id="world">
+			<canvas class="wire-canvas" id="wire-canvas"></canvas>
+			<svg class="wire-hit-layer" id="wire-hit-layer" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
+			<svg class="wire-temp-layer" id="wire-temp-layer" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
+		</div>
+	</section>
+
+	<div class="context-menu" id="context-menu" role="menu" aria-label="Node actions">
+		<button class="ctx-item" data-action="cycle" role="menuitem">Cycle Gate Type</button>
+		<button class="ctx-item" data-action="duplicate" role="menuitem">Duplicate</button>
+		<div class="ctx-sep" role="separator"></div>
+		<button class="ctx-item ctx-danger" data-action="delete" role="menuitem">Delete Node</button>
+	</div>
+
+	<aside class="inspector hidden" id="inspector" aria-live="polite" aria-label="Signal inspector">
+		<div class="inspector-title">Signal Inspector</div>
+		<div id="inspector-content"></div>
+	</aside>
+
+	<div class="zoom-indicator" id="zoom-indicator" aria-live="polite" aria-atomic="true">100%</div>
+	<div class="undo-toast" id="undo-toast" role="alert" aria-live="assertive">
+		<span id="undo-toast-msg">Action undone</span>
+		<button class="undo-toast-btn" id="undo-toast-btn">Undo</button>
+	</div>
+	<div id="sr-announce" class="sr-only" aria-live="assertive" aria-atomic="true"></div>
+
+	<details class="truth-panel" id="truth-panel" open>
+		<summary>Truth Table</summary>
+		<div class="truth-table-wrap" role="region" aria-label="Truth table results">
+			<div id="truth-table-container">
+				<p class="truth-empty">Add inputs and outputs to generate a truth table.</p>
+			</div>
+		</div>
+	</details>
+
+	<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+	<script src="script.js"></script>
+</body>
+
+</html>
