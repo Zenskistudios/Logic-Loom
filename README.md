@@ -1,97 +1,45 @@
-# 🧠 Logic Loom
+# Logic Loon
 
-Logic Loom is an interactive web-based digital logic circuit simulator built with **HTML, CSS, and JavaScript**. It allows users to design, connect, and simulate digital logic circuits using common logic gates while visualizing how signals propagate through a circuit.
+Logic Loom is a project building to learn more about HTML, CSS, JavaScript, and digital logic.
 
-## ✨ Features
+The idea is to create a web application where users can build digital logic circuits using gates like AND, OR, NOT, NAND, NOR, and XOR.
 
-- Interactive drag-and-drop interface
-- Logic gates:
-  - AND
-  - OR
-  - NOT
-  - NAND
-  - NOR
-  - XOR
-- Wire connections between components
-- Real-time logic simulation
-- Truth table generation
-- Undo & Redo support
-- Responsive design
-- Modern UI with smooth animations
-- Keyboard accessibility
+## What I've built so far
 
-## 🚀 Tech Stack
+- Designed the user interface
+- Created the logic gate toolbox
+- Added the top toolbar
+- Separated the project into HTML, CSS, and Javascript files
+- Added a theme picker that saves the selected color using localstorage
+- Made the layout responsive
 
-- HTML5
-- CSS3
-- JavaScript (Vanilla)
+# What I'm working on next
 
-## 📸 Screenshots
+- Dragging logic gates
+- Connecting gates with wires
+- Simulating circuit outputs
+- Generating truth tables
 
-> Add screenshots of your project here after completion.
+# Why I built this 
 
-## 📂 Project Structure
+Watching my father, an electrical engineer, work with digital logic and circuit design inspired me to build **Logic Loom*- a free, web based tool that can eventually help students, hobbyists, and engineers experiment with digital logic circuits without relying on expensive software. I wanted a project that would challange me and help me improve my JavaScript skills while learning more about digital logic.
 
-```
-Logic-Loom/
-│
-├── index.html
-├── style.css
-├── script.js
-├── assets/
-└── README.md
-```
+# How to run it
 
-## 🛠️ Installation
+1. Clone the repository 
 
-Clone the repository:
+'''bash
+git clone https://github.com/Zenskistudios/Logic-Loom.git
+'''
 
-```bash
-git clone https://github.com/yourusername/logic-loom.git
-```
+2. Open the project folder on Vscode:
 
-Open the project folder:
+'''bash
+cd Logic-Loom
+'''
 
-```bash
-cd logic-loom
-```
+3. Click the link above to open in your web browser.
 
-Then open `index.html` in your browser.
+## Screenshot
+![Logic Loom Interface](./Logic_loom.gif)
 
-## 🎯 Purpose
-
-This project was built to deepen my understanding of front-end web development and digital logic concepts by creating an interactive circuit simulator from scratch.
-
-Throughout the project, I focused on improving my HTML, CSS, and JavaScript skills while learning how digital logic gates operate and interact.
-
-## 📈 Future Improvements
-
-- Save and load projects
-- Export circuits as images
-- More logic components
-- Dark/Light mode
-- Mobile optimization
-- Performance improvements
-
-## 🤝 Contributing
-
-Contributions, suggestions, and feedback are welcome.
-
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License.
-
-## 👨‍💻 Author
-
-**Taiwo Jegede**
-
-- GitHub: https://github.com/Zenskistudios
-
----
-
-⭐ If you like this project, consider giving it a star!
