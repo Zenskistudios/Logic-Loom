@@ -508,6 +508,16 @@
 					this._dirty = true;
 				}
 				updateWire(wireId, srcX, srcY, dstX, dstY, value) {
+
+					console.log("updateWire()", {
+						wireId,
+						srcX,
+						srcY,
+						dstX,
+						dstY,
+						value
+					});
+
 					if (this._wireMap.has(wireId)) {
 						const idx = this._wireMap.get(wireId);
 						const e = this._wires[idx];
@@ -805,8 +815,13 @@
 
 					console.log("SRC", src);
 					console.log("DST", dst);
-					
+					console.log("Canvas Offset:", this._canvasOffset);
+
 					if (!src || !dst) return;
+
+					console.log("Wire ID:", wire.id);
+					console.log("Calling updateWire...");
+
 					// Update canvas wire
 					this.wireCanvas.updateWire(wire.id, src.x, src.y, dst.x, dst.y, wire.value);
 					// Update SVG hit area
