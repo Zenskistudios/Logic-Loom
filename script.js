@@ -52,6 +52,12 @@
 					[1, 0, 1],
 					[1, 1, 0]
 				],
+				NOR: [
+					[0, 0, 1],
+					[0, 1, 0],
+					[1, 0, 0],
+					[1, 1, 0]
+				],
 				NOT: [
 					[0, 1],
 					[1, 0]
@@ -567,10 +573,15 @@
 					}
 					if (this._dirty) {
 						this._render();
-						this._dirty = false;
+						this._dirty = false; 
 					}
+					// only keep polling if something's animated or still dirty
+					if (hasTrue || this._wires.some(w => w.value)){
 					this._rafId = requestAnimationFrame(t => this._tick(t));
-				}
+				} else {
+					this._running = false; // sleeps; updateWire() should call start() again
+					}
+					}
 				_render() {
 					const ctx = this.ctx;
 					const w = this.canvas.width / (window.devicePixelRatio || 1);
