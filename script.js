@@ -1027,18 +1027,59 @@
 					this._selBoxStart = null;
 					this._selBoxEl = null;
 					this._structuralChange = false; // tracks if eval needs full or incremental
+					this._storageTimer = null;
 					this.undoMgr.onChange(() => this._updateUndoButtons());
 					this._bindEvents();
 					this.centerView();
 					this._resizeWireCanvas();
 					this.wireCanvasRenderer.start();
-					this.buildDefaultCircuit();
+					if (!this._restoreAutosave()) this.buildDefaultCircuit();
+				}
+				_saveAutosave() {
+					try {
+						localStorage.setItem('logicLoom.autosave', JSON.stringify({
+							version: 1,
+							circuit: JSON.parse(this.graph.toJSON()),
+							camera: { zoom: this.zoom, panX: this.panX, panY: this.panY }
+						}));
+					} catch (error) {
+						console.warn('Logic Loom could not save this circuit locally.', error);
+					}
+				}
+				_queueAutosave() {
+					clearTimeout(this._storageTimer);
+					this._storageTimer = setTimeout(() => this._saveAutosave(), 250);
+				}
+				_restoreAutosave() {
+					try {
+						const saved = JSON.parse(localStorage.getItem('logicLoom.autosave'));
+						if (!saved || saved.version !== 1 || !saved.circuit || !Array.isArray(saved.circuit.nodes) || !Array.isArray(saved.circuit.wires)) return false;
+						this._reset(true);
+						for (const node of saved.circuit.nodes) this.spawnNode(node.kind, node.gateType, node.x, node.y, node.value, node.label, node.id);
+						for (const wire of saved.circuit.wires) {
+							const restored = { ...wire, value: false };
+							if (this.graph.addWire(restored)) this.renderer.updateWireVisuals(restored);
+						}
+						const camera = saved.camera || {};
+						if (Number.isFinite(camera.zoom) && camera.zoom >= 0.15 && camera.zoom <= 4) this.zoom = camera.zoom;
+						if (Number.isFinite(camera.panX)) this.panX = camera.panX;
+						if (Number.isFinite(camera.panY)) this.panY = camera.panY;
+						this.updateCamera();
+						this.undoMgr.clear();
+						this._structuralChange = true;
+						this.scheduleEvaluation();
+						return true;
+					} catch (error) {
+						console.warn('Logic Loom could not restore its local circuit.', error);
+						return false;
+					}
 				}
 				// ── Camera ──
 				updateCamera() {
 					this.worldEl.style.transform = `translate(${this.panX}px,${this.panY}px) scale(${this.zoom})`;
 					document.getElementById('zoom-indicator').textContent = `${Math.round(this.zoom*100)}%`;
 					this._resizeWireCanvas();
+					this._queueAutosave();
 				}
 				centerView() {
 					this.panX = this.viewport.clientWidth / 2 - 600;
@@ -1244,6 +1285,7 @@
 				}
 				// ── Evaluation ──
 				scheduleEvaluation() {
+					this._queueAutosave();
 					if (this.pendingEval) return;
 					this.pendingEval = requestAnimationFrame(() => {
 						this.pendingEval = null;
@@ -2106,14 +2148,10 @@
 				// ── Serialization ──
 				_saveCircuit() {
 					try {
-						const json = this.graph.toJSON();
-						navigator.clipboard.writeText(json).then(() => {
-							this._showToast('Circuit copied to clipboard');
-							srAnnounce('Circuit saved to clipboard');
-						}).catch(() => {
-							// Fallback: prompt
-							prompt('Copy this circuit data:', json);
-						});
+						clearTimeout(this._storageTimer);
+						this._saveAutosave();
+						this._showToast('Circuit saved on this device');
+						srAnnounce('Circuit saved on this device');
 					} catch (e) {
 						srAnnounce('Save failed');
 					}
