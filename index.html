@@ -17,8 +17,10 @@
     <button class="action-btn" id="btn-redo">Redo</button>
     <button class="action-btn" id="btn-save">Save</button>
     <button class="action-btn" id="btn-load">Load</button>
-	<button class="action-btn" id="btn-export-png">Export PNG</button>
+	<input type="file" id="circuit-file-input" accept=".logicloom,.json,application/json" hidden>
+    <button class="action-btn" id="btn-export-png">Export PNG</button>
     <button class="action-btn" id="btn-randomize">Randomize</button>
+    <button class="action-btn" id="btn-challenges" aria-expanded="false" aria-controls="challenge-panel">Challenges</button>
 
     <button class="action-btn" id="themeBtn">Theme</button>
 
@@ -90,6 +92,35 @@
 	<aside class="inspector hidden" id="inspector" aria-live="polite" aria-label="Signal inspector">
 		<div class="inspector-title">Signal Inspector</div>
 		<div id="inspector-content"></div>
+	</aside>
+
+	<aside class="challenge-panel hidden" id="challenge-panel" aria-label="Logic challenges">
+		<div class="challenge-heading">
+			<div>
+				<div class="challenge-eyebrow">Practice mode</div>
+				<h2>Logic challenges</h2>
+			</div>
+			<button class="challenge-close" id="challenge-close" aria-label="Close challenges">×</button>
+		</div>
+		<label class="challenge-label" for="challenge-select">Choose a challenge</label>
+		<select id="challenge-select" class="challenge-select">
+			<option value="">Choose a challenge…</option>
+			<option value="not">1 · Inverter</option>
+			<option value="and">2 · Both must be on</option>
+			<option value="xor">3 · Exactly one</option>
+			<option value="majority">4 · Majority vote</option>
+		</select>
+		<p class="challenge-description" id="challenge-description">Build a circuit, then choose a challenge to check it.</p>
+		<button class="challenge-start-button" id="challenge-start" disabled>Set up challenge</button>
+		<div class="challenge-feedback" id="challenge-feedback" role="status" aria-live="polite">Choose a challenge to begin.</div>
+		<div class="challenge-table-wrap" id="challenge-table-wrap" hidden>
+			<div class="challenge-table-title">Target truth table</div>
+			<div id="challenge-table"></div>
+		</div>
+		<div class="challenge-hint-row">
+			<button class="challenge-hint-button" id="challenge-hint" disabled>Show hint</button>
+			<p id="challenge-hint-text" class="challenge-hint-text" aria-live="polite"></p>
+		</div>
 	</aside>
 
 	<div class="zoom-indicator" id="zoom-indicator" aria-live="polite" aria-atomic="true">100%</div>

@@ -63,6 +63,32 @@
 					[1, 0]
 				]
 			});
+			const CHALLENGES = Object.freeze({
+				not: {
+					inputs: 1,
+					description: 'Build a circuit whose output is the opposite of its input.',
+					hints: ['A NOT gate reverses a signal.', 'Connect one input to a NOT gate, then connect the gate to one output.'],
+					evaluate: bits => !bits[0]
+				},
+				and: {
+					inputs: 2,
+					description: 'Turn the output on only when both inputs are on.',
+					hints: ['The output should be false if either input is false.', 'An AND gate matches this rule.'],
+					evaluate: bits => bits[0] && bits[1]
+				},
+				xor: {
+					inputs: 2,
+					description: 'Turn the output on when exactly one input is on.',
+					hints: ['The output is off when both inputs match.', 'An XOR gate turns on when its inputs differ.'],
+					evaluate: bits => bits[0] !== bits[1]
+				},
+				majority: {
+					inputs: 3,
+					description: 'Build a three-input majority vote: the output is on when at least two inputs are on.',
+					hints: ['Check each pair of inputs for both being on.', 'Combine the three pairwise AND results with OR gates.'],
+					evaluate: bits => bits.filter(Boolean).length >= 2
+				}
+			});
 			const _esc = document.createElement('div');
 
 			function escHTML(s) {
@@ -1028,6 +1054,8 @@
 					this._selBoxEl = null;
 					this._structuralChange = false; // tracks if eval needs full or incremental
 					this._storageTimer = null;
+					this.activeChallengeId = '';
+					this.challengeHintIndex = 0;
 					this.undoMgr.onChange(() => this._updateUndoButtons());
 					this._bindEvents();
 					this.centerView();
@@ -1075,6 +1103,113 @@
 					}
 				}
 				// ── Camera ──
+				_toggleChallengePanel(forceOpen) {
+					const panel = document.getElementById('challenge-panel');
+					const button = document.getElementById('btn-challenges');
+					const open = forceOpen ?? panel.classList.contains('hidden');
+					panel.classList.toggle('hidden', !open);
+					button.setAttribute('aria-expanded', String(open));
+					if (open) document.getElementById('challenge-select').focus();
+				}
+				_selectChallenge(id) {
+					this.activeChallengeId = id;
+					this.challengeHintIndex = 0;
+					document.getElementById('challenge-hint-text').textContent = '';
+					this._renderChallenge();
+				}
+				_renderChallenge() {
+					const challenge = CHALLENGES[this.activeChallengeId];
+					const description = document.getElementById('challenge-description');
+					const feedback = document.getElementById('challenge-feedback');
+					const tableWrap = document.getElementById('challenge-table-wrap');
+					const hintButton = document.getElementById('challenge-hint');
+					const startButton = document.getElementById('challenge-start');
+					const hintText = document.getElementById('challenge-hint-text');
+					if (!challenge) {
+						description.textContent = 'Build a circuit, then choose a challenge to check it.';
+						feedback.textContent = 'Choose a challenge to begin.';
+						feedback.className = 'challenge-feedback';
+						tableWrap.hidden = true;
+						hintButton.disabled = true;
+						startButton.disabled = true;
+						hintText.textContent = '';
+						return;
+					}
+					description.textContent = challenge.description;
+					hintButton.disabled = false;
+					startButton.disabled = false;
+					hintButton.textContent = 'Show hint';
+					tableWrap.hidden = false;
+					const labels = ['A', 'B', 'C'].slice(0, challenge.inputs);
+					let html = '<table class="truth-table" role="table"><thead><tr>';
+					for (const label of labels) html += `<th scope="col">${label}</th>`;
+					html += '<th scope="col">OUT</th></tr></thead><tbody>';
+					const rowCount = 1 << challenge.inputs;
+					for (let row = 0; row < rowCount; row++) {
+						const bits = labels.map((_, index) => Boolean(row & (1 << (challenge.inputs - 1 - index))));
+						const output = challenge.evaluate(bits) ? 1 : 0;
+						html += '<tr>' + bits.map(bit => `<td class="${bit ? 'v1' : ''}">${bit ? 1 : 0}</td>`).join('') + `<td class="${output ? 'v1' : ''}">${output}</td></tr>`;
+					}
+					document.getElementById('challenge-table').innerHTML = html + '</tbody></table>';
+					this._gradeChallenge();
+				}
+				_gradeChallenge() {
+					const challenge = CHALLENGES[this.activeChallengeId];
+					if (!challenge) return;
+					const feedback = document.getElementById('challenge-feedback');
+					const inputs = this.graph.getNodesByKind('INPUT');
+					const outputs = this.graph.getNodesByKind('OUTPUT');
+					if (inputs.length !== challenge.inputs) {
+						feedback.textContent = `Add exactly ${challenge.inputs} input${challenge.inputs === 1 ? '' : 's'} to try this challenge. You have ${inputs.length}.`;
+						feedback.className = 'challenge-feedback error';
+						return;
+					}
+					if (outputs.length !== 1) {
+						feedback.textContent = `Use exactly one output to check this challenge. You have ${outputs.length}.`;
+						feedback.className = 'challenge-feedback error';
+						return;
+					}
+					const snapshot = this.graph.createSnapshot();
+					let incorrect = 0;
+					const rows = 1 << challenge.inputs;
+					try {
+						for (let row = 0; row < rows; row++) {
+							const bits = inputs.map((_, index) => Boolean(row & (1 << (challenge.inputs - 1 - index))));
+							inputs.forEach((node, index) => { node.value = bits[index]; });
+							this.graph.evaluateFull();
+							if (Boolean(outputs[0].value) !== Boolean(challenge.evaluate(bits))) incorrect++;
+						}
+					} finally {
+						this.graph.restoreSnapshot(snapshot);
+					}
+					if (incorrect === 0) {
+						feedback.textContent = `Nice work! Your circuit matches all ${rows} truth-table rows.`;
+						feedback.className = 'challenge-feedback success';
+					} else {
+						feedback.textContent = `${incorrect} of ${rows} rows do not match yet. Change your circuit and try again.`;
+						feedback.className = 'challenge-feedback error';
+					}
+				}
+				_showChallengeHint() {
+					const challenge = CHALLENGES[this.activeChallengeId];
+					if (!challenge) return;
+					const hint = challenge.hints[Math.min(this.challengeHintIndex, challenge.hints.length - 1)];
+					document.getElementById('challenge-hint-text').textContent = hint;
+					this.challengeHintIndex++;
+					if (this.challengeHintIndex >= challenge.hints.length) document.getElementById('challenge-hint').textContent = 'Show hint again';
+				}
+				_startChallenge() {
+					const challenge = CHALLENGES[this.activeChallengeId];
+					if (!challenge) return;
+					if (!confirm('Replace the current canvas with a fresh challenge setup? Save a backup first if you want to keep this circuit.')) return;
+					this._reset(true);
+					for (let index = 0; index < challenge.inputs; index++) {
+						this.spawnNode('INPUT', null, 360, 150 + index * 110, false);
+					}
+					this.spawnNode('OUTPUT', null, 760, 150 + (challenge.inputs - 1) * 55, false);
+					this._structuralChange = true;
+					this.scheduleEvaluation();
+				}
 				updateCamera() {
 					this.worldEl.style.transform = `translate(${this.panX}px,${this.panY}px) scale(${this.zoom})`;
 					document.getElementById('zoom-indicator').textContent = `${Math.round(this.zoom*100)}%`;
@@ -1305,6 +1440,7 @@
 						}
 						this._resizeWireCanvas();
 						this.truthGen.render('truth-table-container');
+						this._gradeChallenge();
 						this.inspector.update();
 					});
 				}
@@ -1497,6 +1633,12 @@
 					});
 					document.getElementById('btn-save').addEventListener('click', () => this._saveCircuit());
 					document.getElementById('btn-load').addEventListener('click', () => this._loadCircuit());
+					document.getElementById('circuit-file-input').addEventListener('change', e => this._importCircuitFile(e));
+					document.getElementById('btn-challenges').addEventListener('click', () => this._toggleChallengePanel());
+					document.getElementById('challenge-close').addEventListener('click', () => this._toggleChallengePanel(false));
+					document.getElementById('challenge-select').addEventListener('change', e => this._selectChallenge(e.target.value));
+					document.getElementById('challenge-hint').addEventListener('click', () => this._showChallengeHint());
+					document.getElementById('challenge-start').addEventListener('click', () => this._startChallenge());
 					document.getElementById('btn-export-png').addEventListener('click', () => this._exportPNG());
 					document.getElementById('btn-randomize').addEventListener('click', () => this._randomize());
 					document.getElementById('btn-clear-wires').addEventListener('click', () => this._clearWiresUndo());
@@ -2150,8 +2292,20 @@
 					try {
 						clearTimeout(this._storageTimer);
 						this._saveAutosave();
-						this._showToast('Circuit saved on this device');
-						srAnnounce('Circuit saved on this device');
+						const backup = {
+							version: 1,
+							circuit: JSON.parse(this.graph.toJSON()),
+							camera: { zoom: this.zoom, panX: this.panX, panY: this.panY }
+						};
+						const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+						const url = URL.createObjectURL(blob);
+						const link = document.createElement('a');
+						link.href = url;
+						link.download = `logic-loom-${new Date().toISOString().slice(0, 10)}.logicloom`;
+						link.click();
+						setTimeout(() => URL.revokeObjectURL(url), 1000);
+						this._showToast('Circuit backup downloaded');
+						srAnnounce('Circuit backup downloaded');
 					} catch (e) {
 						srAnnounce('Save failed');
 					}
@@ -2175,63 +2329,47 @@
     });
 }
 				_loadCircuit() {
-					navigator.clipboard.readText().then(text => {
+					document.getElementById('circuit-file-input').click();
+				}
+				_importCircuitFile(event) {
+					const file = event.target.files[0];
+					event.target.value = '';
+					if (!file) return;
+					const reader = new FileReader();
+					reader.onload = () => {
 						try {
-							const data = CircuitGraph.fromJSON(text);
+							const parsed = JSON.parse(reader.result);
+							const saved = parsed.circuit ? parsed : { circuit: CircuitGraph.fromJSON(reader.result) };
+							const data = saved.circuit;
+							if (!data || !Array.isArray(data.nodes) || !Array.isArray(data.wires)) throw new Error('Invalid circuit data');
+							if (data.nodes.some(node => !node.id || !['INPUT', 'GATE', 'OUTPUT'].includes(node.kind) || !Number.isFinite(node.x) || !Number.isFinite(node.y))) throw new Error('Invalid node data');
 							this._reset(true);
-							// Rebuild
-							for (const nd of data.nodes) {
-								this.spawnNode(nd.kind, nd.gateType, nd.x, nd.y, nd.value, nd.label, nd.id);
+							for (const node of data.nodes) this.spawnNode(node.kind, node.gateType, node.x, node.y, node.value, node.label, node.id);
+							for (const wire of data.wires) {
+								const restored = { ...wire, id: wire.id || `w${_wid++}`, value: false };
+								if (this.graph.addWire(restored)) this.renderer.updateWireVisuals(restored);
 							}
-							for (const wd of data.wires) {
-								const w = {
-									id: wd.id || `w${_wid++}`,
-									srcNodeId: wd.srcNodeId,
-									srcPort: wd.srcPort,
-									dstNodeId: wd.dstNodeId,
-									dstPort: wd.dstPort,
-									value: false
-								};
-								const result = this.graph.addWire(w);
-								if (result) this.renderer.updateWireVisuals(w);
-							}
+							const camera = saved.camera || {};
+							if (Number.isFinite(camera.zoom) && camera.zoom >= 0.15 && camera.zoom <= 4) this.zoom = camera.zoom;
+							if (Number.isFinite(camera.panX)) this.panX = camera.panX;
+							if (Number.isFinite(camera.panY)) this.panY = camera.panY;
+							this.updateCamera();
 							this.undoMgr.clear();
 							this._structuralChange = true;
 							this.scheduleEvaluation();
-							srAnnounce('Circuit loaded from clipboard');
-							this._showToast('Circuit loaded');
-						} catch (e) {
-							this._showToast('Invalid circuit data');
-							srAnnounce('Load failed: invalid data');
+							this._showToast('Circuit backup loaded');
+							srAnnounce('Circuit backup loaded');
+						} catch (error) {
+							console.warn('Could not load circuit backup.', error);
+							this._showToast('Invalid circuit backup');
+							srAnnounce('Load failed: invalid circuit backup');
 						}
-					}).catch(() => {
-						const text = prompt('Paste circuit data:');
-						if (text) {
-							try {
-								const data = CircuitGraph.fromJSON(text);
-								this._reset(true);
-								for (const nd of data.nodes) this.spawnNode(nd.kind, nd.gateType, nd.x, nd.y, nd.value, nd.label, nd.id);
-								for (const wd of data.wires) {
-									const w = {
-										id: wd.id || `w${_wid++}`,
-										srcNodeId: wd.srcNodeId,
-										srcPort: wd.srcPort,
-										dstNodeId: wd.dstNodeId,
-										dstPort: wd.dstPort,
-										value: false
-									};
-									const result = this.graph.addWire(w);
-									if (result) this.renderer.updateWireVisuals(w);
-								}
-								this.undoMgr.clear();
-								this._structuralChange = true;
-								this.scheduleEvaluation();
-								srAnnounce('Circuit loaded');
-							} catch (e) {
-								srAnnounce('Load failed');
-							}
-						}
-					});
+					};
+					reader.onerror = () => {
+						this._showToast('Could not read circuit backup');
+						srAnnounce('Load failed: could not read file');
+					};
+					reader.readAsText(file);
 				}
 				_reset(skipDefault = false) {
 					this.cancelWiring();
